@@ -1,0 +1,53 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply antialiased;
+  }
+
+  html {
+    @apply scroll-smooth;
+  }
+
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    @apply bg-meadow-50 text-meadow-900;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background: linear-gradient(
+      135deg,
+      rgba(107, 145, 66, 0.9) 0%,
+      rgba(59, 92, 35, 0.8) 100%
+    );
+  }
+
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(5, 22, 4, 0.3);
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-300 ease-out hover:scale-105;
+  }
+
+  .fade-in {
+    @apply opacity-0 animate-fade-in;
+  }
+
+  .slide-up {
+    @apply translate-y-4 opacity-0 animate-slide-up;
+  }
+
+  .card-bg {
+    @apply bg-white/80 backdrop-blur-sm border border-meadow-200/50;
+  }
+
+  .accent-green {
+    @apply bg-gradient-to-r from-meadow-400 to-sage-500;
+  }
+}
