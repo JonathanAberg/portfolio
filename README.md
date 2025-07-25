@@ -64,7 +64,7 @@ The design features a nature-inspired theme with:
 1. Clone the repository
 
 ```bash
-git clone https://github.com/jonathanaberg/portfolio.git
+git clone https://github.com/JonathanAberg/portfolio.git
 cd portfolio
 ```
 
