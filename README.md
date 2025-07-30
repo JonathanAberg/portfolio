@@ -6,7 +6,7 @@ A modern, responsive portfolio website showcasing my journey as a Frontend Devel
 
 ## 🚀 Live Demo
 
-[View Live Portfolio](https://your-portfolio-url.vercel.app) *(Coming Soon)*
+[View Live Portfolio](https://your-portfolio-url.vercel.app) _(Coming Soon)_
 
 ## 📖 About
 
@@ -26,7 +26,7 @@ This portfolio website represents my transition from IT professional to Frontend
 - **Styling:** Tailwind CSS
 - **Animations:** Framer Motion
 - **Build Tool:** Vite
-- **Deployment:** Vercel *(planned)*
+- **Deployment:** Vercel _(planned)_
 
 ## ✨ Features
 
@@ -47,6 +47,7 @@ This portfolio website represents my transition from IT professional to Frontend
 ## 🎨 Design
 
 The design features a nature-inspired theme with:
+
 - **Colors:** Meadow and sage green palette
 - **Typography:** Inter font family
 - **Layout:** Clean, minimal design with plenty of white space
@@ -122,6 +123,7 @@ portfolio/
 ## 🎯 Skills Showcased
 
 ### Frontend Development
+
 - HTML5 & CSS3
 - JavaScript (ES6+)
 - React 18
@@ -129,6 +131,7 @@ portfolio/
 - Responsive Design
 
 ### Tools & Technologies
+
 - Git & GitHub
 - Vite
 - VS Code
@@ -136,6 +139,7 @@ portfolio/
 - Figma
 
 ### IT Background
+
 - Network Administration
 - IT Consulting
 - System Troubleshooting
@@ -160,4 +164,4 @@ This project is open source and available under the [MIT License](LICENSE).
 
 ---
 
-*This portfolio is continuously evolving as I learn and grow as a Frontend Developer. Feel free to reach out if you'd like to collaborate!*
+_This portfolio is continuously evolving as I learn and grow as a Frontend Developer. Feel free to reach out if you'd like to collaborate!_

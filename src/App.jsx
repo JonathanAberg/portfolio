@@ -4,10 +4,12 @@ import WorkShowcase from "./components/WorkShowcase";
 import Skills from "./components/Skills";
 import About from "./components/About";
 import Footer from "./components/Footer";
+import ScrollProgress from "./components/ScrollProgress";
 
 function App() {
   return (
     <div className="min-h-screen">
+      <ScrollProgress />
       <Navigation />
       <Hero />
       <WorkShowcase />

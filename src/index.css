@@ -10,11 +10,14 @@
 
   html {
     @apply scroll-smooth;
+    font-size: 16px;
   }
 
   body {
     font-family: "Inter", system-ui, sans-serif;
-    @apply bg-meadow-50 text-meadow-900;
+    @apply bg-meadow-50 text-sage-900 transition-colors duration-300;
+    line-height: 1.6;
+    font-weight: 400;
   }
 }
 
@@ -22,17 +25,17 @@
   .hero-gradient {
     background: linear-gradient(
       135deg,
-      rgba(107, 145, 66, 0.9) 0%,
-      rgba(59, 92, 35, 0.8) 100%
+      rgba(15, 23, 42, 0.02) 0%,
+      rgba(15, 23, 42, 0.05) 100%
     );
   }
 
   .text-shadow {
-    text-shadow: 0 2px 4px rgba(5, 22, 4, 0.3);
+    text-shadow: 0 2px 4px rgba(15, 23, 42, 0.1);
   }
 
   .hover-scale {
-    @apply transition-transform duration-300 ease-out hover:scale-105;
+    @apply transition-transform duration-500 ease-out hover:scale-[1.02];
   }
 
   .fade-in {
@@ -44,10 +47,15 @@
   }
 
   .card-bg {
-    @apply bg-white/80 backdrop-blur-sm border border-meadow-200/50;
+    @apply bg-white/60 backdrop-blur-sm border border-sage-200/40;
   }
 
-  .accent-green {
-    @apply bg-gradient-to-r from-meadow-400 to-sage-500;
+  .accent-gradient {
+    @apply bg-gradient-to-r from-sage-400 to-sage-600;
+  }
+
+  /* Custom smooth transitions */
+  .smooth-transition {
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 }

@@ -1,86 +1,194 @@
 import { motion } from "framer-motion";
+import { ArrowRight, Code, Palette, Zap } from "lucide-react";
 
 const Hero = () => {
+  // Animation variants
+  const titleVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.03,
+        delayChildren: 0.3,
+      },
+    },
+  };
+
+  const charVariants = {
+    hidden: { opacity: 0, y: 100 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  const subtitleVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.8,
+        ease: "easeOut",
+        delay: 0.8,
+      },
+    },
+  };
+
+  const projectsVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 1.2,
+      },
+    },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut",
+      },
+    },
+  };
+
+  // Split text into characters for animation
+  const splitText = (text) => {
+    return text.split("").map((char, index) => (
+      <motion.span key={index} variants={charVariants} className="char">
+        {char === " " ? "\u00A0" : char}
+      </motion.span>
+    ));
+  };
+
   return (
-    <section className="pt-20 pb-20 px-6 bg-gradient-to-br from-meadow-50 via-sage-50 to-meadow-100">
-      <div className="max-w-6xl mx-auto">
-        {/* Main Hero Content */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-center mb-16"
+    <section className="min-h-screen flex items-center justify-center px-6 pt-20 bg-gradient-to-b from-meadow-50 to-sage-50">
+      <div className="max-w-7xl mx-auto text-center">
+        {/* Main Heading */}
+        <motion.h1
+          variants={titleVariants}
+          initial="hidden"
+          animate="visible"
+          className="text-5xl md:text-7xl lg:text-8xl heading-primary mb-8 leading-tight text-sage-900"
         >
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-light leading-none mb-8 tracking-tight text-meadow-800">
-            Hi, I&apos;m <br />
-            Jonathan Åberg.
-          </h1>
-          <p className="text-xl md:text-2xl text-meadow-700 max-w-3xl mx-auto leading-relaxed">
-            Frontend Developer student at Jensen Yrkeshögskola, crafting digital
-            experiences with React and modern web technologies.
-          </p>
-        </motion.div>
+          {splitText("Beautiful")}
+          <br />
+          {splitText("Design Meets")}
+          <br />
+          {splitText("Smart Technology")}
+        </motion.h1>
 
-        {/* Featured Project */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mb-20"
+        {/* Subtitle */}
+        <motion.p
+          variants={subtitleVariants}
+          initial="hidden"
+          animate="visible"
+          className="text-lg md:text-xl text-sage-700 max-w-2xl mx-auto mb-16 leading-relaxed"
         >
-          <div className="aspect-video bg-meadow-100 rounded-lg overflow-hidden mb-6 border border-meadow-200/50">
-            <img
-              src="https://plus.unsplash.com/premium_photo-1739054760977-f9e246e4c1be?q=80&w=2148&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
-              alt="Jonathan Åberg - Frontend Developer"
-              className="w-full h-full object-cover"
-            />
-          </div>
+          We craft digital experiences that are intuitive, elegant, and built to
+          perform. From concept to launch, we bring your vision to life with
+          precision and care.
+        </motion.p>
 
-          <div className="flex items-center justify-between">
-            <h2 className="text-2xl md:text-3xl font-light text-meadow-800">
-              Portfolio Website
-            </h2>
-            <span className="text-sm text-meadow-600 hidden md:block">
-              React & Tailwind CSS
-            </span>
-          </div>
-        </motion.div>
-
-        {/* Preview Section */}
+        {/* Featured Projects Grid */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          variants={projectsVariants}
+          initial="hidden"
+          animate="visible"
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-20"
         >
-          <h3 className="text-xl font-light mb-8 text-meadow-700">Preview</h3>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { title: "Organic Branding", date: "July 14, 2025" },
-              { title: "Forest Analytics", date: "January 15, 2025" },
-              { title: "Green Energy", date: "June 6, 2024" },
-            ].map((project, index) => (
-              <div key={index} className="group cursor-pointer">
-                <div className="aspect-[4/3] bg-meadow-100 rounded-lg overflow-hidden mb-4 border border-meadow-200/30">
-                  <img
-                    src={`https://images.unsplash.com/photo-${
-                      index === 0
-                        ? "1441974231531-c6227db76b6e"
-                        : index === 1
-                        ? "1518837695005-2083093ee35b"
-                        : "1473773508845-188df298d2d1"
-                    }?w=400&h=300&fit=crop&crop=center`}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-                <h4 className="text-lg font-medium mb-1 text-meadow-800">
-                  {project.title}
-                </h4>
-                <p className="text-sm text-meadow-600">{project.date}</p>
+          {/* Project Card 1 */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10, scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+            className="group cursor-pointer"
+          >
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-sage-200/50 hover:shadow-lg transition-all duration-300">
+              <div className="w-12 h-12 bg-sage-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-sage-200 transition-colors">
+                <Code className="w-6 h-6 text-sage-600" />
               </div>
-            ))}
-          </div>
+              <h3 className="text-xl text-sage-900 font-semibold mb-3">
+                Web Development
+              </h3>
+              <p className="text-sage-600 text-sm leading-relaxed">
+                Modern, responsive websites built with the latest technologies
+                and best practices.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Project Card 2 */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10, scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+            className="group cursor-pointer"
+          >
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-sage-200/50 hover:shadow-lg transition-all duration-300">
+              <div className="w-12 h-12 bg-sage-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-sage-200 transition-colors">
+                <Palette className="w-6 h-6 text-sage-600" />
+              </div>
+              <h3 className="text-xl text-sage-900 font-semibold mb-3">
+                UI/UX Design
+              </h3>
+              <p className="text-sage-600 text-sm leading-relaxed">
+                User-centered design that creates meaningful connections between
+                people and technology.
+              </p>
+            </div>
+          </motion.div>
+
+          {/* Project Card 3 */}
+          <motion.div
+            variants={cardVariants}
+            whileHover={{ y: -10, scale: 1.02 }}
+            transition={{ duration: 0.3 }}
+            className="group cursor-pointer"
+          >
+            <div className="bg-white rounded-2xl p-8 shadow-sm border border-sage-200/50 hover:shadow-lg transition-all duration-300">
+              <div className="w-12 h-12 bg-sage-100 rounded-xl flex items-center justify-center mb-6 group-hover:bg-sage-200 transition-colors">
+                <Zap className="w-6 h-6 text-sage-600" />
+              </div>
+              <h3 className="text-xl text-sage-900 font-semibold mb-3">
+                Performance
+              </h3>
+              <p className="text-sage-600 text-sm leading-relaxed">
+                Lightning-fast websites optimized for speed, accessibility, and
+                search engines.
+              </p>
+            </div>
+          </motion.div>
+        </motion.div>
+
+        {/* Call to Action */}
+        {/* CTA Button */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 1.8 }}
+          className="flex justify-center mt-16"
+        >
+          <motion.button
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="bg-sage-600 text-white px-8 py-4 rounded-full text-lg font-medium hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl"
+          >
+            <div className="flex items-center gap-2">
+              <span>View My Work</span>
+              <ArrowRight className="w-5 h-5" />
+            </div>
+          </motion.button>
         </motion.div>
       </div>
     </section>

@@ -1,0 +1,120 @@
+/* Theme Toggle Animations */
+.theme-toggle-container {
+  --off: #d7e8b5;
+  --mid: #89af54;
+  --on: #3b5c23;
+  --transDur: 0.5s;
+  --timing: cubic-bezier(0.6, 0, 0.4, 1);
+}
+
+.icon-container {
+  background: linear-gradient(145deg, #ffffff, #f8f9fa);
+  border-radius: 0.5em / 0.375em;
+  box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+    0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--off) inset,
+    0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+  position: absolute;
+  top: 0.125em;
+  left: 0.125em;
+  width: 1em;
+  height: 0.75em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Remove transition to allow animations to work */
+}
+
+.theme-toggle-container.dark .icon-container {
+  /* Position and styling for dark mode - animations will override these */
+}
+
+.theme-toggle-container.light .icon-container {
+  /* Position and styling for light mode - animations will override these */
+}
+
+.theme-toggle-container.pristine.light .icon-container {
+  /* Initial state for light mode */
+  left: 0.125em;
+  width: 1em;
+  box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+    0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--off) inset,
+    0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+  animation: none !important;
+  transition: none !important;
+}
+
+.theme-toggle-container.pristine.dark .icon-container {
+  /* Initial state for dark mode */
+  left: 1.125em;
+  width: 1em;
+  box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+    0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--on) inset,
+    0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Icon animations */
+.sun-icon,
+.moon-icon {
+  opacity: 1;
+  transform: rotate(0deg) scale(1);
+  transition: all var(--transDur) var(--timing);
+}
+
+/* Handle stretching animations with icons */
+.theme-toggle-container:not(.pristine).dark .icon-container {
+  animation: handleOnWithIcon var(--transDur) var(--timing) forwards;
+}
+
+.theme-toggle-container:not(.pristine).light .icon-container {
+  animation: handleOffWithIcon var(--transDur) var(--timing) forwards;
+}
+
+@keyframes handleOffWithIcon {
+  from {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--on) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 1.125em;
+    width: 1em;
+  }
+  50% {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--mid) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 0.125em;
+    width: 2em;
+  }
+  to {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--off) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 0.125em;
+    width: 1em;
+  }
+}
+
+@keyframes handleOnWithIcon {
+  from {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--off) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 0.125em;
+    width: 1em;
+  }
+  50% {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--mid) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 0.125em;
+    width: 2em;
+  }
+  to {
+    box-shadow: 0 0.175em 0.175em 0 rgba(0, 0, 0, 0.06) inset,
+      0 0.375em 0 rgba(0, 0, 0, 0.12) inset, 0 0.375em 0 var(--on) inset,
+      0 0.475em 0.1em rgba(0, 0, 0, 0.06) inset;
+    left: 1.125em;
+    width: 1em;
+  }
+}
