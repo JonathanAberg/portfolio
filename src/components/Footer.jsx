@@ -135,7 +135,7 @@ const Footer = () => {
                   href="mailto:jonathan@example.com"
                   className="text-white hover:text-sage-400 transition-colors text-sm"
                 >
-                  jonathan@example.com
+                  jonathan@hotmail.com
                 </a>
               </div>
               <div>
