@@ -149,7 +149,7 @@ portfolio/
 ## 📧 Contact
 
 - **Email:** [jonathan.aberg@example.com](mailto:jonathan.aberg@example.com)
-- **LinkedIn:** [linkedin.com/in/jonathanaberg](https://linkedin.com/in/jonathanaberg)
+- **LinkedIn:** [https://www.linkedin.com/in/jonathan-aberg/](https://www.linkedin.com/in/jonathan-aberg/)
 - **GitHub:** [github.com/jonathanaberg](https://github.com/jonathanaberg)
 
 ## 📝 License
