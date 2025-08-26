@@ -242,6 +242,30 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
 
       {/* Keyboard Section - Part of content flow */}
       <div className="absolute bottom-24 left-0 right-0 px-6">
+        <AnimatePresence>
+          {showEnterHint && (
+            <motion.div
+              key="enter-hint-global"
+              initial={{ opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -4 }}
+              transition={{ duration: 1.2 }}
+              className="mb-2 text-center text-sage-600 text-xs md:text-sm font-light tracking-wide pointer-events-none select-none w-full"
+            >
+              <motion.span
+                animate={{ scale: [1, 1.05, 1], opacity: [1, 0.9, 1] }}
+                transition={{
+                  duration: 2.2,
+                  repeat: Infinity,
+                  ease: "easeInOut",
+                }}
+                className="inline-block"
+              >
+                Press Enter
+              </motion.span>
+            </motion.div>
+          )}
+        </AnimatePresence>
         <div className="max-w-4xl mx-auto">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -249,21 +273,7 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
             transition={{ duration: 0.8, delay: 0.5 }}
             className="bg-sage-50/80 backdrop-blur-sm rounded-2xl p-6 border border-sage-200/50 shadow-lg relative"
           >
-            <AnimatePresence>
-              {showEnterHint && (
-                <motion.div
-                  key="enter-hint"
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -4 }}
-                  transition={{ duration: 0.4 }}
-                  className="absolute -top-6 left-1/2 -translate-x-1/2 text-sage-600 text-xs md:text-sm font-light tracking-wide pointer-events-none select-none flex items-center gap-2"
-                >
-                  <span className="hidden md:inline-block w-2 h-2 rounded-full bg-sage-500 animate-pulse" />
-                  Press enter...
-                </motion.div>
-              )}
-            </AnimatePresence>
+            {/* Hint moved outside for true centering */}
             <div className="space-y-4">
               {/* Row 1 (Numbers) */}
               <div className="flex justify-center gap-2">
