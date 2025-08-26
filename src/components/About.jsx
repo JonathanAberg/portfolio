@@ -100,9 +100,9 @@ const About = () => {
           >
             <motion.div variants={itemVariants}>
               <p className="text-xl md:text-2xl lg:text-3xl leading-relaxed text-sage-600 font-light">
-                I&apos;m part of a small team of curious makers and thoughtful
-                problem-solvers — driven by a love for new ideas, clever tools,
-                and the question &quot;what if?&quot;
+                I&apos;m a curious maker and thoughtful problem-solver — driven
+                by a love for new ideas, clever tools, and the question
+                &quot;what if?&quot;
               </p>
             </motion.div>
 
@@ -179,7 +179,7 @@ const About = () => {
               className="aspect-[4/5] bg-gradient-to-br from-meadow-100 to-meadow-200/50 rounded-2xl overflow-hidden"
             >
               <img
-                src="/IMG_2135.JPG"
+                src="/DSCF1384.jpg"
                 alt="Jonathan Åberg"
                 className="w-full h-full object-cover block"
                 style={{
