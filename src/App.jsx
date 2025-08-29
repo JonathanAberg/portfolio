@@ -5,18 +5,92 @@ import Skills from "./components/Skills";
 import About from "./components/About";
 import Footer from "./components/Footer";
 import ScrollProgress from "./components/ScrollProgress";
+import { useEffect, useRef } from "react";
+import { LanguageProvider } from "./context/LanguageContext";
 
 function App() {
+  const currentIndexRef = useRef(-1);
+
+  useEffect(() => {
+    const order = ["home", "work-featured", "about", "skills", "contact"];
+    let scrolling = false;
+    let scrollTimeout;
+
+    const sections = () =>
+      order.map((id) => document.getElementById(id)).filter(Boolean);
+
+    const updateIndexFromScroll = () => {
+      if (scrolling) return;
+      const s = sections();
+      const scrollY = window.scrollY;
+      let active = -1;
+      s.forEach((el, idx) => {
+        const top = el.getBoundingClientRect().top + window.scrollY;
+        if (top - 10 <= scrollY) active = idx;
+      });
+      currentIndexRef.current = active;
+    };
+
+    const handleScroll = () => updateIndexFromScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    updateIndexFromScroll();
+
+    const handleKeyDown = (e) => {
+      if (e.key !== "Enter") return;
+      const tag = document.activeElement?.tagName;
+      if (["INPUT", "TEXTAREA", "SELECT"].includes(tag)) return;
+      if (document.body.dataset.modalOpen === "true") return;
+
+      const s = sections();
+      if (!s.length) return;
+      if (currentIndexRef.current === -1) updateIndexFromScroll();
+      if (currentIndexRef.current >= s.length - 1) return;
+
+      const next = s[currentIndexRef.current + 1];
+      if (next) {
+        window.dispatchEvent(new Event("simulateEnterPress"));
+        scrolling = true;
+        const style = window.getComputedStyle(next);
+        const scrollMarginTop = parseInt(style.scrollMarginTop) || 0; // from scroll-mt-* utility
+        const extra = parseInt(next.dataset.enterOffset || "0"); // only applied when explicitly set on TARGET
+        const targetTop =
+          next.getBoundingClientRect().top +
+          window.scrollY -
+          scrollMarginTop +
+          extra;
+        window.scrollTo({
+          top: targetTop < 0 ? 0 : targetTop,
+          behavior: "smooth",
+        });
+        currentIndexRef.current += 1;
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          scrolling = false;
+          updateIndexFromScroll();
+        }, 650);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("scroll", handleScroll);
+      clearTimeout(scrollTimeout);
+    };
+  }, []);
+
   return (
-    <div className="min-h-screen">
-      <ScrollProgress />
-      <Navigation />
-      <Hero />
-      <WorkShowcase />
-      <Skills />
-      <About />
-      <Footer />
-    </div>
+    <LanguageProvider>
+      <div className="min-h-screen" id="main">
+        <ScrollProgress />
+        <Navigation />
+        <Hero />
+        <WorkShowcase variant="featured" />
+        <About />
+        <Skills />
+        <Footer />
+      </div>
+    </LanguageProvider>
   );
 }
 

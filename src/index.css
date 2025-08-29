@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+/* Satoshi loaded via index.html */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -14,7 +14,7 @@
   }
 
   body {
-    font-family: "Inter", system-ui, sans-serif;
+    font-family: "Satoshi";
     @apply bg-meadow-50 text-sage-900 transition-colors duration-300;
     line-height: 1.6;
     font-weight: 400;
@@ -57,5 +57,10 @@
   /* Custom smooth transitions */
   .smooth-transition {
     transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  }
+
+  .avatar-oval {
+    border-radius: 50% / 40%;
+    clip-path: ellipse(50% 40% at 50% 50%);
   }
 }

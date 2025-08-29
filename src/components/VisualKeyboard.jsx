@@ -71,28 +71,21 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     }
   }, [currentIndex, text.length]);
 
-  // Listen for real keyboard Enter presses
+  // Listen for custom simulateEnterPress event to animate Enter key globally for sequential navigation.
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (e.key === "Enter") {
-        setPressedKey("enter");
-        scrollToWork();
-        setShowEnterHint(false);
-        // Clear highlight after a moment (avoid fighting with scripted typing of newline)
-        setTimeout(() => {
-          setPressedKey((prev) => (prev === "enter" ? null : prev));
-        }, 160);
-      }
+    const simulate = () => {
+      setPressedKey("enter");
+      setTimeout(() => {
+        setPressedKey((prev) => (prev === "enter" ? null : prev));
+      }, 180);
     };
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
+    window.addEventListener("simulateEnterPress", simulate);
+    return () => window.removeEventListener("simulateEnterPress", simulate);
   }, []);
 
-  // Shared scroll action for Enter
-  const scrollToWork = () => {
-    const workSection = document.getElementById("work");
-    if (workSection) workSection.scrollIntoView({ behavior: "smooth" });
-    setShowEnterHint(false);
+  // Function to trigger global Enter navigation when clicking the on-screen Enter key
+  const triggerNextSection = () => {
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
   };
 
   // Start floating effect after image fully appears
@@ -114,8 +107,8 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     <div className="relative min-h-screen bg-gradient-to-b from-sage-50 to-meadow-50">
       {/* Main Content Section */}
       <div className="flex items-start justify-center px-6 pt-8 pb-8 min-h-screen">
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+        <div className="max-w-screen-lg mx-auto w-full">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - Text Display */}
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -195,11 +188,16 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                         }
                         className="relative"
                       >
-                        <div className="w-full h-full rounded-full overflow-hidden shadow-2xl border-4 border-white flex items-center justify-center bg-white">
+                        <div className="w-full h-full avatar-oval overflow-hidden shadow-2xl border-4 border-white flex items-center justify-center bg-white">
                           <img
                             src={jonathanImage}
                             alt="Jonathan Åberg - Frontend Developer"
                             className="w-full h-full object-cover"
+                            loading="eager"
+                            decoding="async"
+                            fetchPriority="high"
+                            width={420}
+                            height={420}
                           />
                         </div>
 
@@ -261,7 +259,7 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                 }}
                 className="inline-block"
               >
-                Press Enter
+                Tryck Enter
               </motion.span>
             </motion.div>
           )}
@@ -359,7 +357,7 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                 </div>
                 {/* Vertical Enter aligned to rows 2 & 3 */}
                 <motion.div
-                  onClick={scrollToWork}
+                  onClick={triggerNextSection}
                   animate={{
                     scale: pressedKey === "enter" ? 0.97 : 1,
                     backgroundColor:

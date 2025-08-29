@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useLanguage } from "../context/LanguageContext";
+import { Globe2 } from "lucide-react";
 
 const Navigation = () => {
   const navRef = useRef(null);
+  const { t, switchLanguage, lang, translations } = useLanguage();
+  const [open, setOpen] = useState(false);
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     // Scroll-based navbar background opacity
@@ -20,6 +25,27 @@ const Navigation = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (
+        open &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target)
+      ) {
+        setOpen(false);
+      }
+    };
+    const handleEsc = (e) => {
+      if (e.key === "Escape") setOpen(false);
+    };
+    window.addEventListener("mousedown", handleClickOutside);
+    window.addEventListener("keydown", handleEsc);
+    return () => {
+      window.removeEventListener("mousedown", handleClickOutside);
+      window.removeEventListener("keydown", handleEsc);
+    };
+  }, [open]);
 
   // Animation variants
   const navVariants = {
@@ -65,61 +91,123 @@ const Navigation = () => {
       animate="visible"
       className="fixed top-0 left-0 right-0 z-50 border-b border-sage-200/20 transition-all duration-300"
     >
+      {/* Skip link */}
+      <a
+        href="#main"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-4 bg-white text-sage-900 px-4 py-2 rounded-md shadow focus-visible:ring-2 focus-visible:ring-sage-500"
+      >
+        {t.nav.skip}
+      </a>
       <div className="max-w-7xl mx-auto px-6 py-6">
         <div className="flex items-center justify-between">
           {/* Logo */}
           <motion.div variants={itemVariants} className="text-xl font-medium">
             <a
               href="#"
-              className="text-sage-900 hover:text-sage-700 smooth-transition"
+              className="text-sage-900 hover:text-sage-700 smooth-transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded"
             >
               Jonathan Åberg
             </a>
           </motion.div>
 
           {/* Navigation Links */}
-          <div className="flex items-center space-x-8">
+          <div className="flex items-center space-x-6">
             <motion.div
               variants={navVariants}
               className="hidden md:flex items-center space-x-8"
             >
               <motion.a
                 variants={linkVariants}
-                href="#work"
-                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium"
+                href="#"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
               >
-                Work
+                {t.nav.home}
               </motion.a>
               <motion.a
                 variants={linkVariants}
-                href="#services"
-                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium"
+                href="#work-featured"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
               >
-                Services
+                {t.nav.featured}
+              </motion.a>
+              <motion.a
+                variants={linkVariants}
+                href="#alla-projekt"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
+              >
+                {t.nav.all}
               </motion.a>
               <motion.a
                 variants={linkVariants}
                 href="#about"
-                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
               >
-                About
+                {t.nav.about}
+              </motion.a>
+              <motion.a
+                variants={linkVariants}
+                href="#skills"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
+              >
+                {t.nav.skills}
               </motion.a>
               <motion.a
                 variants={linkVariants}
                 href="#contact"
-                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-1"
               >
-                Contact
+                {t.nav.contact}
               </motion.a>
             </motion.div>
 
-            {/* Mobile Menu */}
+            {/* Language Switcher */}
+            <div className="relative" ref={dropdownRef}>
+              <button
+                onClick={() => setOpen((o) => !o)}
+                aria-haspopup="true"
+                aria-expanded={open}
+                aria-label={t.nav.language}
+                className="flex items-center gap-2 text-sage-600 hover:text-sage-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-2 py-1 text-sm"
+              >
+                <Globe2 className="w-5 h-5" />
+                <span className="hidden sm:inline font-medium">
+                  {lang.toUpperCase()}
+                </span>
+              </button>
+              {open && (
+                <div
+                  role="menu"
+                  className="absolute right-0 mt-2 w-40 bg-white border border-sage-200 rounded-lg shadow-lg p-1 z-50"
+                >
+                  {Object.values(translations).map((opt) => (
+                    <button
+                      key={opt.code}
+                      role="menuitem"
+                      onClick={() => {
+                        switchLanguage(opt.code);
+                        setOpen(false);
+                      }}
+                      className={`w-full text-left px-3 py-2 rounded-md text-sm flex items-center justify-between hover:bg-sage-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 ${
+                        lang === opt.code
+                          ? "text-sage-900 font-medium"
+                          : "text-sage-600"
+                      }`}
+                    >
+                      <span>{opt.label}</span>
+                      {lang === opt.code && <span className="text-xs">✓</span>}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* Mobile Menu Placeholder */}
             <div className="md:hidden">
               <motion.button
                 variants={itemVariants}
-                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium"
+                className="text-sm text-sage-600 hover:text-sage-900 smooth-transition font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded px-2 py-1"
               >
-                Menu
+                {t.nav.menu}
               </motion.button>
             </div>
           </div>

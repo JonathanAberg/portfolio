@@ -1,17 +1,38 @@
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import {
   Github,
   X,
   ChevronLeft,
   ChevronRight,
-  ExternalLink,
   ArrowRight,
-} from "lucide-react";
+  Code,
+  Palette,
+  Zap,
+  Mail,
+} from "lucide-react"; // added icons for bottom intro
+import { useLanguage } from "../context/LanguageContext";
+// Local screenshots imports
+import t1 from "../assets/projects/twitter2/shot1.png";
+import t2 from "../assets/projects/twitter2/shot2.jpg";
+import t3 from "../assets/projects/twitter2/shot3.jpg";
+import m1 from "../assets/projects/minkompis/shot1.jpg";
+import m2 from "../assets/projects/minkompis/shot2.jpg";
+import m3 from "../assets/projects/minkompis/shot3.jpg";
+import b1 from "../assets/projects/beatai/shot1.jpg";
+import b2 from "../assets/projects/beatai/shot2.jpg";
+import b3 from "../assets/projects/beatai/shot3.jpg";
+import d1 from "../assets/projects/dogbook/shot1.jpg";
+import d2 from "../assets/projects/dogbook/shot2.jpg";
+import d3 from "../assets/projects/dogbook/shot3.jpg";
 
-const WorkShowcase = () => {
+const WorkShowcase = ({ variant = "all" }) => {
+  const { t } = useLanguage();
+  // Force variant to 'featured' only usage by ignoring 'all'
+  const effectiveVariant = variant === "all" ? "featured" : variant;
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const closeButtonRef = useRef(null);
 
   const projects = [
     {
@@ -26,11 +47,7 @@ const WorkShowcase = () => {
       link: "https://github.com/JonathanAberg/Twitter2-Frontend",
       featured: true,
       tech: ["React", "Tailwind CSS", "Frontend"],
-      screenshots: [
-        "https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1557804506-669a67965ba0?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=800&h=600&fit=crop",
-      ],
+      screenshots: [t1, t2, t3],
     },
     {
       id: 2,
@@ -44,11 +61,7 @@ const WorkShowcase = () => {
       link: "https://github.com/JonathanAberg/MinKompis",
       featured: true,
       tech: ["React", "JavaScript", "Web App"],
-      screenshots: [
-        "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1553028826-f4804a6dba3b?w=800&h=600&fit=crop",
-      ],
+      screenshots: [m1, m2, m3],
     },
     {
       id: 3,
@@ -62,11 +75,7 @@ const WorkShowcase = () => {
       link: "https://github.com/JonathanAberg/BeatAI",
       featured: true,
       tech: ["AI", "React", "Modern UI"],
-      screenshots: [
-        "https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1655635949147-35a4fbbd9faf?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=800&h=600&fit=crop",
-      ],
+      screenshots: [b1, b2, b3],
     },
     {
       id: 4,
@@ -80,11 +89,7 @@ const WorkShowcase = () => {
       link: "https://github.com/JonathanAberg/DogBook",
       featured: true,
       tech: ["React", "Social", "Community"],
-      screenshots: [
-        "https://images.unsplash.com/photo-1551717743-49959800b1f6?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1583337130417-3346a1be7dee?w=800&h=600&fit=crop",
-        "https://images.unsplash.com/photo-1518717758536-85ae29035b6d?w=800&h=600&fit=crop",
-      ],
+      screenshots: [d1, d2, d3],
     },
   ];
 
@@ -143,38 +148,72 @@ const WorkShowcase = () => {
     setSelectedProject(project);
     setCurrentImageIndex(0);
     document.body.style.overflow = "hidden";
+    document.body.dataset.modalOpen = "true";
+    setTimeout(() => closeButtonRef.current?.focus(), 50);
   };
 
   const closeProject = () => {
     setSelectedProject(null);
     setCurrentImageIndex(0);
     document.body.style.overflow = "auto";
+    delete document.body.dataset.modalOpen;
   };
 
-  const nextImage = () => {
+  const nextImage = useCallback(() => {
     if (selectedProject) {
       setCurrentImageIndex((prev) =>
         prev === selectedProject.screenshots.length - 1 ? 0 : prev + 1
       );
     }
-  };
+  }, [selectedProject]);
 
-  const prevImage = () => {
+  const prevImage = useCallback(() => {
     if (selectedProject) {
       setCurrentImageIndex((prev) =>
         prev === 0 ? selectedProject.screenshots.length - 1 : prev - 1
       );
     }
-  };
+  }, [selectedProject]);
+
+  // Keyboard handlers inside modal
+  useEffect(() => {
+    if (!selectedProject) return;
+    const handler = (e) => {
+      if (e.key === "Escape") {
+        e.preventDefault();
+        closeProject();
+      } else if (e.key === "ArrowRight") {
+        e.preventDefault();
+        nextImage();
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        prevImage();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [selectedProject, nextImage, prevImage]);
+
+  const displayedProjects =
+    effectiveVariant === "featured" ? projects.slice(0, 3) : projects;
 
   return (
     <>
       <section
-        id="work"
-        className="py-32 bg-meadow-50 relative overflow-hidden"
+        id={effectiveVariant === "featured" ? "work-featured" : "alla-projekt"}
+        data-enter-offset={effectiveVariant === "featured" ? "120" : "0"}
+        className={`py-32 ${
+          effectiveVariant === "featured" ? "bg-meadow-50" : "bg-white"
+        } relative overflow-hidden scroll-mt-24`}
+        role="region"
+        aria-labelledby={
+          effectiveVariant === "featured" ? "heading-utvalda" : "heading-alla"
+        }
       >
         {/* Background Elements */}
-        <div className="absolute top-40 right-20 w-96 h-96 bg-sage-100/40 rounded-full blur-3xl" />
+        {effectiveVariant === "featured" && (
+          <div className="absolute top-40 right-20 w-96 h-96 bg-sage-100/40 rounded-full blur-3xl" />
+        )}
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           {/* Section Header */}
@@ -183,16 +222,32 @@ const WorkShowcase = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
             viewport={{ once: true, amount: 0.3 }}
-            className="text-center mb-20"
+            className="text-center mb-16"
           >
-            <h2 className="text-5xl md:text-6xl font-light text-sage-900 mb-6 tracking-tight">
-              Selected Work
+            <h2
+              id={
+                effectiveVariant === "featured"
+                  ? "heading-utvalda"
+                  : "heading-alla"
+              }
+              className="text-5xl md:text-6xl font-light text-sage-900 mb-6 tracking-tight"
+            >
+              {effectiveVariant === "featured"
+                ? t.work.featuredTitle
+                : t.work.allTitle}
             </h2>
-            <p className="text-xl text-sage-700 max-w-2xl mx-auto leading-relaxed font-light">
-              A curated collection of projects that showcase attention to
-              detail, technical excellence, and thoughtful design.
-            </p>
+            {effectiveVariant === "featured" && (
+              <p className="text-xl text-sage-700 max-w-2xl mx-auto leading-relaxed font-light">
+                {t.work.featuredSubtitle}
+              </p>
+            )}
           </motion.div>
+
+          {effectiveVariant === "featured" && (
+            // Removed previous intro block (CTA + tagline + value cards)
+            // to match exact desired layout with only header -> grid -> CTA row
+            <></>
+          )}
 
           {/* Projects Grid */}
           <motion.div
@@ -200,99 +255,119 @@ const WorkShowcase = () => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 lg:grid-cols-2 gap-16"
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            {projects.map((project, index) => (
-              <motion.div
-                key={project.id}
-                variants={itemVariants}
-                className="group cursor-pointer"
-                onClick={() => openProject(project)}
-              >
-                <div className="space-y-6">
-                  {/* Project Image/Visual */}
-                  <div className="relative overflow-hidden bg-sage-100 rounded-sm aspect-[4/3]">
-                    <div className="absolute inset-0 bg-gradient-to-br from-sage-200 to-sage-300 group-hover:from-sage-300 group-hover:to-sage-400 transition-all duration-700"></div>
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="text-6xl font-light text-sage-500 group-hover:text-sage-600 transition-colors duration-500">
-                        {String(index + 1).padStart(2, "0")}
-                      </div>
-                    </div>
-                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500"></div>
-
-                    {/* View Details Overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                      <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-medium text-sage-900">
-                        View Details
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Project Info */}
+            {displayedProjects.map((project, index) => (
+              <motion.div key={project.id} variants={itemVariants}>
+                <button
+                  type="button"
+                  onClick={() => openProject(project)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openProject(project);
+                    }
+                  }}
+                  aria-label={`${t.work.openProjectAria}: ${project.title}`}
+                  className="group w-full text-left cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded-xl"
+                >
                   <div className="space-y-4">
-                    <div className="flex items-start justify-between">
-                      <div className="space-y-2">
-                        <h3 className="text-2xl font-light text-sage-900 group-hover:text-sage-700 transition-colors duration-300">
-                          {project.title}
-                        </h3>
-                        <p className="text-sage-600 text-sm uppercase tracking-wide font-medium">
-                          {project.category}
-                        </p>
+                    {/* Project Image/Visual */}
+                    <div className="relative overflow-hidden bg-sage-100 rounded-xl aspect-[4/3]">
+                      <div className="absolute inset-0 bg-gradient-to-br from-sage-200 to-sage-300 group-hover:from-sage-300 group-hover:to-sage-400 transition-all duration-700" />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <div className="text-5xl font-light text-sage-500 group-hover:text-sage-600 transition-colors duration-500">
+                          {String(index + 1).padStart(2, "0")}
+                        </div>
                       </div>
-                      <span className="text-sage-500 text-sm font-light">
-                        {project.year}
-                      </span>
+                      <div className="absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-all duration-500" />
+                      <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="bg-white/90 backdrop-blur-sm px-4 py-1.5 rounded-full text-xs font-medium text-sage-900">
+                          {t.work.detailsBadge}
+                        </div>
+                      </div>
                     </div>
 
-                    <p className="text-sage-700 leading-relaxed font-light max-w-md">
-                      {project.description}
-                    </p>
-
-                    {/* Tech Stack */}
-                    <div className="flex flex-wrap gap-2">
-                      {project.tech.map((tech) => (
-                        <span
-                          key={tech}
-                          className="px-3 py-1 bg-sage-100 text-sage-700 text-xs rounded-full font-medium"
-                        >
-                          {tech}
+                    {/* Project Info */}
+                    <div className="space-y-2">
+                      <div className="flex items-start justify-between">
+                        <div className="space-y-1">
+                          <h3 className="text-xl font-light text-sage-900 group-hover:text-sage-700 transition-colors duration-300">
+                            {project.title}
+                          </h3>
+                          <p className="text-sage-600 text-xs uppercase tracking-wide font-medium">
+                            {project.category}
+                          </p>
+                        </div>
+                        <span className="text-sage-500 text-xs font-light">
+                          {project.year}
                         </span>
-                      ))}
+                      </div>
+                      <p className="text-sage-700 leading-relaxed font-light text-sm max-w-md">
+                        {project.description}
+                      </p>
+                      <div className="flex flex-wrap gap-1.5">
+                        {project.tech.map((tech) => (
+                          <span
+                            key={tech}
+                            className="px-2 py-0.5 bg-sage-100 text-sage-700 text-[10px] rounded-full font-medium"
+                          >
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                      <motion.div
+                        className="flex items-center text-sage-900 font-light text-xs group-hover:text-sage-700 transition-colors duration-300"
+                        whileHover={{ x: 4 }}
+                        aria-hidden="true"
+                      >
+                        {t.work.viewMore}
+                        <ArrowRight className="w-3 h-3 ml-1 transform group-hover:translate-x-1 transition-transform duration-300" />
+                      </motion.div>
                     </div>
-
-                    <motion.div
-                      className="flex items-center text-sage-900 font-light text-sm group-hover:text-sage-700 transition-colors duration-300"
-                      whileHover={{ x: 4 }}
-                    >
-                      View Project Details
-                      <ArrowRight className="w-4 h-4 ml-2 transform group-hover:translate-x-1 transition-transform duration-300" />
-                    </motion.div>
                   </div>
-                </div>
+                </button>
               </motion.div>
             ))}
           </motion.div>
 
-          {/* Bottom CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.3 }}
-            viewport={{ once: true }}
-            className="text-center mt-24"
-          >
-            <p className="text-sage-700 mb-8 font-light">
-              Interested in working together?
-            </p>
-            <motion.a
-              href="#contact"
-              whileHover={{ scale: 1.02, y: -2 }}
-              whileTap={{ scale: 0.98 }}
-              className="inline-block bg-sage-800 text-white px-8 py-4 text-sm font-medium tracking-wide hover:bg-sage-900 transition-all duration-300"
+          {effectiveVariant === "featured" && (
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.2 }}
+              transition={{ duration: 0.75 }}
+              className="mt-20 flex flex-col sm:flex-row items-center justify-center gap-4"
             >
-              Get In Touch
-            </motion.a>
-          </motion.div>
+              <a
+                href="#work-featured"
+                className="bg-sage-600 text-white px-8 py-4 rounded-full text-sm md:text-base font-medium hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500"
+              >
+                {t.hero.ctaProjects}
+                <ArrowRight className="w-4 h-4 inline ml-2" />
+              </a>
+              <a
+                href="#contact"
+                className="bg-white text-sage-800 px-8 py-4 rounded-full text-sm md:text-base font-medium border border-sage-300 hover:border-sage-400 hover:bg-sage-50 transition-colors shadow-sm hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 inline-flex items-center"
+              >
+                {t.hero.ctaContact}
+                <Mail className="w-4 h-4 inline ml-2" />
+              </a>
+              <a
+                href="https://github.com/JonathanAberg"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-sage-600 hover:text-sage-900 text-sm md:text-base font-medium inline-flex items-center gap-2 px-4 py-2 rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 group"
+                aria-label={t.githubSection.button}
+              >
+                <Github className="w-4 h-4" />
+                <span className="underline-offset-4 group-hover:underline">
+                  {t.githubSection.button}
+                </span>
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </a>
+            </motion.div>
+          )}
         </div>
       </section>
 
@@ -326,8 +401,9 @@ const WorkShowcase = () => {
                   </p>
                 </div>
                 <button
+                  ref={closeButtonRef}
                   onClick={closeProject}
-                  className="w-8 h-8 flex items-center justify-center text-sage-500 hover:text-sage-700 transition-colors"
+                  className="w-8 h-8 flex items-center justify-center text-sage-500 hover:text-sage-700 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 rounded"
                 >
                   <X className="w-6 h-6" />
                 </button>
@@ -344,32 +420,31 @@ const WorkShowcase = () => {
                         currentImageIndex + 1
                       }`}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      decoding="async"
                     />
                   </div>
-
                   {/* Carousel Controls */}
                   {selectedProject.screenshots.length > 1 && (
                     <>
                       <button
                         onClick={prevImage}
-                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-sage-600 hover:text-sage-900 transition-colors"
+                        className="absolute left-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-sage-600 hover:text-sage-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500"
                       >
                         <ChevronLeft className="w-5 h-5" />
                       </button>
                       <button
                         onClick={nextImage}
-                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-sage-600 hover:text-sage-900 transition-colors"
+                        className="absolute right-4 top-1/2 -translate-y-1/2 w-10 h-10 bg-white/90 backdrop-blur-sm rounded-full flex items-center justify-center text-sage-600 hover:text-sage-900 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500"
                       >
                         <ChevronRight className="w-5 h-5" />
                       </button>
-
-                      {/* Image Indicators */}
                       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex space-x-2">
                         {selectedProject.screenshots.map((_, index) => (
                           <button
                             key={index}
                             onClick={() => setCurrentImageIndex(index)}
-                            className={`w-2 h-2 rounded-full transition-colors ${
+                            className={`w-2 h-2 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/80 ${
                               index === currentImageIndex
                                 ? "bg-white"
                                 : "bg-white/50"
@@ -386,11 +461,9 @@ const WorkShowcase = () => {
                   <p className="text-sage-700 leading-relaxed">
                     {selectedProject.detailedDescription}
                   </p>
-
-                  {/* Tech Stack */}
                   <div>
                     <h4 className="text-sm font-medium text-sage-900 mb-2">
-                      Technologies Used
+                      {t.work.modalTech}
                     </h4>
                     <div className="flex flex-wrap gap-2">
                       {selectedProject.tech.map((tech) => (
@@ -403,17 +476,15 @@ const WorkShowcase = () => {
                       ))}
                     </div>
                   </div>
-
-                  {/* GitHub Link */}
                   <div className="flex items-center space-x-4 pt-4">
                     <a
                       href={selectedProject.link}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center px-4 py-2 bg-sage-800 text-white rounded-lg hover:bg-sage-900 transition-colors text-sm font-medium"
+                      className="inline-flex items-center px-4 py-2 bg-sage-800 text-white rounded-lg hover:bg-sage-900 transition-colors text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500"
                     >
                       <Github className="w-4 h-4 mr-2" />
-                      View on GitHub
+                      {t.work.github}
                     </a>
                     <span className="text-sage-500 text-sm">
                       {selectedProject.year}

@@ -68,7 +68,10 @@ const Footer = () => {
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-sage-900 text-white py-20 px-6 relative overflow-hidden">
+    <footer
+      id="contact"
+      className="bg-sage-900 text-white py-20 px-6 relative overflow-hidden"
+    >
       <div className="max-w-7xl mx-auto">
         <motion.div
           variants={contentVariants}
