@@ -121,18 +121,18 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      data-enter-offset="100" // adjust this value (positive = scroll a bit further down, negative = higher)
-      className="h-screen px-6 pt-20 pb-10 flex flex-col bg-gradient-to-b from-meadow-50 to-white overflow-hidden"
+      data-enter-offset="90" // lowered offset so section locks in slightly higher (was 100)
+      className="min-h-screen px-6 pt-12 md:pt-14 pb-12 flex flex-col bg-gradient-to-b from-meadow-50 to-white overflow-hidden"
     >
-      <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
+      <div className="max-w-7xl mx-auto w-full flex flex-col flex-1">
         {/* Header */}
-        <div className="text-center mb-6">
+        <div className="text-center mb-4 md:mb-6">
           <motion.h2
             variants={titleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="text-3xl md:text-5xl font-light text-sage-900 mb-3 tracking-tight"
+            className="text-3xl md:text-5xl font-light text-sage-900 mb-2 md:mb-3 tracking-tight"
           >
             {splitText("Skills & Services")}
           </motion.h2>
@@ -150,7 +150,7 @@ const Skills = () => {
         {/* Content + CTA wrapper to distribute space */}
         <div className="flex-1 flex flex-col">
           {/* Content Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 flex-1 min-h-0">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-7 md:gap-8 flex-1 min-h-0">
             {/* Skills list */}
             <motion.div
               variants={contentVariants}

@@ -31,7 +31,7 @@ const WorkShowcase = ({ variant = "all" }) => {
     {
       id: 2,
       title: "MinKompis",
-      category: "Web Application",
+      category: "Mobile Application",
       description:
         "A companion application designed to help users manage and track their daily activities with an intuitive and user-friendly interface.",
       detailedDescription:

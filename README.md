@@ -6,7 +6,7 @@ A modern, responsive portfolio website showcasing my journey as a Frontend Devel
 
 ## 🚀 Live Demo
 
-[View Live Portfolio](https://your-portfolio-url.vercel.app) _(Coming Soon)_
+[View Live Portfolio] (jonathanaberg.se)
 
 ## 📖 About
 
@@ -26,11 +26,11 @@ This portfolio website represents my transition from IT professional to Frontend
 - **Styling:** Tailwind CSS
 - **Animations:** Framer Motion
 - **Build Tool:** Vite
-- **Deployment:** Vercel _(planned)_
+- **Deployment:** Vercel
 
 ## ✨ Features
 
-- **Responsive Design:** Fully responsive across all devices
+- **Responsive Design:** Fully responsive across all devices (_planned_)
 - **Smooth Animations:** Powered by Framer Motion
 - **Modern UI:** Clean, minimal design with nature-inspired color palette
 - **Performance Optimized:** Fast loading with Vite build system
@@ -49,7 +49,7 @@ This portfolio website represents my transition from IT professional to Frontend
 The design features a nature-inspired theme with:
 
 - **Colors:** Meadow and sage green palette
-- **Typography:** Inter font family
+- **Typography:** Satoshi font family
 - **Layout:** Clean, minimal design with plenty of white space
 - **Animations:** Subtle, smooth transitions that enhance UX
 
@@ -100,7 +100,7 @@ npm run preview
 ```
 portfolio/
 ├── public/
-│   └── vite.svg
+│   └──
 ├── src/
 │   ├── components/
 │   │   ├── About.jsx
@@ -136,7 +136,6 @@ portfolio/
 - Vite
 - VS Code
 - npm/yarn
-- Figma
 
 ### IT Background
 
@@ -144,11 +143,10 @@ portfolio/
 - IT Consulting
 - System Troubleshooting
 - Technical Documentation
-- Client Communication
 
 ## 📧 Contact
 
-- **Email:** [jonathan.aberg@example.com](mailto:jonathan.aberg@example.com)
+- **Email:** [jonathan.aberg@hotmail.com](mailto:jonathan.aberg@hotmail.com)
 - **LinkedIn:** [https://www.linkedin.com/in/jonathan-aberg/](https://www.linkedin.com/in/jonathan-aberg/)
 - **GitHub:** [github.com/jonathanaberg](https://github.com/jonathanaberg)
 
@@ -159,7 +157,7 @@ This project is open source and available under the [MIT License](LICENSE).
 ## 🙏 Acknowledgments
 
 - Design inspiration from modern portfolio websites
-- Images from [Unsplash](https://unsplash.com)
+
 - Built during my studies at Jensen Yrkeshögskola
 
 ---

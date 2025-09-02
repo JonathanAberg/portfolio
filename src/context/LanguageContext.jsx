@@ -96,7 +96,7 @@ const translations = {
       github: "GitHub",
     },
     hero: {
-      greeting: "Hi,\nI'm\nJonathan.",
+      greeting: "Hi,\nI'm Jonathan.",
       tagline:
         "I build digital experiences that are intuitive, elegant and fast. From idea to launch – focused on detail, performance and the user.",
       cards: {

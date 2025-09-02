@@ -2,20 +2,31 @@ import { useState, useEffect, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import jonathanImage from "../assets/images/jonathan-aberg.jpg";
 
+const SECOND_MESSAGE = "Scrolla neråt för att utforska min portfolio.";
+
 const VisualKeyboard = ({ text, onComplete, isActive }) => {
+  const [activeText, setActiveText] = useState(text); // dynamic text phases
   const [currentIndex, setCurrentIndex] = useState(0);
   const [pressedKey, setPressedKey] = useState(null);
   const [displayText, setDisplayText] = useState("");
   const [showImage, setShowImage] = useState(false);
   const [floating, setFloating] = useState(false);
   const [showEnterHint, setShowEnterHint] = useState(false);
+  const [secondPhaseStarted, setSecondPhaseStarted] = useState(false);
+  const [selecting, setSelecting] = useState(false); // simulate selection highlight
 
+  // Keyboard layout (restored)
   const keyboardLayout = [
     ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0", "="],
     ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p", "[", "]"],
     ["a", "s", "d", "f", "g", "h", "j", "k", "l", "{", "}", "'"],
     ["z", "x", "c", "v", "b", "n", "m", ",", ".", "/", "?"],
   ];
+
+  // Speed config
+  const FAST_CHARS = 6;
+  const FAST_INTERVAL = 60;
+  const BASE_INTERVAL = 70;
 
   const specialKeys = useMemo(
     () => ({
@@ -25,16 +36,24 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     []
   );
 
+  // Typing effect
   useEffect(() => {
-    if (!isActive || currentIndex >= text.length) {
-      if (currentIndex >= text.length && onComplete) {
-        setTimeout(onComplete, 800);
+    if (!isActive || selecting) return; // pause while selecting
+    if (currentIndex >= activeText.length) {
+      if (
+        currentIndex >= activeText.length &&
+        onComplete &&
+        !secondPhaseStarted
+      ) {
+        setTimeout(onComplete, 600);
       }
       return;
     }
 
+    const interval = currentIndex < FAST_CHARS ? FAST_INTERVAL : BASE_INTERVAL;
+
     const timer = setTimeout(() => {
-      const currentChar = text[currentIndex];
+      const currentChar = activeText[currentIndex];
       const keyToPress = specialKeys[currentChar] || currentChar.toLowerCase();
 
       setPressedKey(keyToPress);
@@ -42,41 +61,61 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
 
       setTimeout(() => {
         setPressedKey(null);
-      }, 100);
+      }, 85);
 
       setCurrentIndex((prev) => prev + 1);
-    }, 140);
+    }, interval);
 
     return () => clearTimeout(timer);
-  }, [currentIndex, text, isActive, onComplete, specialKeys]);
+  }, [
+    currentIndex,
+    activeText,
+    isActive,
+    onComplete,
+    specialKeys,
+    selecting,
+    secondPhaseStarted,
+  ]);
 
+  // Reset on activation start
   useEffect(() => {
     if (isActive) {
+      setActiveText(text);
       setCurrentIndex(0);
       setDisplayText("");
       setPressedKey(null);
+      setShowImage(false);
+      setFloating(false);
+      setShowEnterHint(false);
+      setSecondPhaseStarted(false);
+      setSelecting(false);
       window.scrollTo(0, 0);
     }
-  }, [isActive]);
+  }, [isActive, text]);
 
+  // Image + hint triggers for first phase only
   useEffect(() => {
-    if (currentIndex === text.length) {
-      const t = setTimeout(() => setShowImage(true), 180);
-
-      const hintTimer = setTimeout(() => setShowEnterHint(true), 600);
+    if (
+      currentIndex === activeText.length &&
+      activeText === text &&
+      !selecting
+    ) {
+      const t = setTimeout(() => setShowImage(true), 80);
+      const hintTimer = setTimeout(() => setShowEnterHint(true), 450);
       return () => {
         clearTimeout(t);
         clearTimeout(hintTimer);
       };
     }
-  }, [currentIndex, text.length]);
+  }, [currentIndex, activeText, text, selecting]);
 
+  // Simulate Enter key highlight event listener
   useEffect(() => {
     const simulate = () => {
       setPressedKey("enter");
       setTimeout(() => {
         setPressedKey((prev) => (prev === "enter" ? null : prev));
-      }, 180);
+      }, 140);
     };
     window.addEventListener("simulateEnterPress", simulate);
     return () => window.removeEventListener("simulateEnterPress", simulate);
@@ -86,17 +125,36 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
   };
 
+  // Floating animation start when image visible
   useEffect(() => {
     if (showImage) {
-      const startFloatTimer = setTimeout(() => setFloating(true), 900);
+      const startFloatTimer = setTimeout(() => setFloating(true), 500);
       return () => clearTimeout(startFloatTimer);
     } else {
       setFloating(false);
     }
   }, [showImage]);
 
+  useEffect(() => {
+    if (!isActive || secondPhaseStarted) return;
+    const selectionTimer = setTimeout(() => {
+      setSelecting(true);
+
+      const clearTimer = setTimeout(() => {
+        setDisplayText("");
+        setCurrentIndex(0);
+        setActiveText(SECOND_MESSAGE);
+        setSecondPhaseStarted(true);
+        setSelecting(false);
+      }, 650);
+      return () => clearTimeout(clearTimer);
+    }, 7000); // 7s
+
+    return () => clearTimeout(selectionTimer);
+  }, [isActive, secondPhaseStarted]);
+
   const imageVariants = {
-    hidden: { opacity: 0, scale: 0.6, y: -16 },
+    hidden: { opacity: 0, scale: 0.6, y: -14 },
     visible: { opacity: 1, scale: 1, y: 0 },
   };
 
@@ -108,32 +166,43 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - Text Display */}
             <motion.div
-              initial={{ opacity: 0, x: -50 }}
+              initial={{ opacity: 0, x: -40 }}
               animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.8 }}
+              transition={{ duration: 0.55, ease: "easeOut" }}
               className="text-left pl-4 md:pl-8 lg:pl-14 xl:pl-20"
             >
-              <div className="text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light text-sage-900 leading-[0.9] tracking-tight">
+              <div
+                className={`text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light leading-[0.9] tracking-tight ${
+                  selecting ? "relative" : ""
+                } ${selecting ? "transition-colors duration-300" : ""} ${
+                  selecting ? "text-sage-900" : "text-sage-900"
+                }`}
+              >
+                {" "}
                 {displayText.split("\n").map((line, lineIndex) => {
                   const isLastLine =
                     lineIndex === displayText.split("\n").length - 1;
                   const shouldShowCursor =
-                    isLastLine && currentIndex < text.length;
+                    isLastLine &&
+                    currentIndex < activeText.length &&
+                    !selecting;
 
                   return (
                     <motion.div
                       key={lineIndex}
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      transition={{ delay: lineIndex * 0.1 }}
-                      className="block"
+                      transition={{ delay: lineIndex * 0.08 }}
+                      className={`block ${
+                        selecting ? "bg-sage-300 px-1 rounded-sm" : ""
+                      }`}
                     >
                       {line}
                       {shouldShowCursor && (
                         <motion.span
                           animate={{ opacity: [1, 0] }}
                           transition={{
-                            duration: 0.8,
+                            duration: 0.65,
                             repeat: Infinity,
                             repeatType: "reverse",
                           }}
@@ -148,7 +217,6 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
 
             {/* Right Side - Profile Image */}
             <div className="flex justify-center lg:justify-end">
-              {/* Fixed-size wrapper prevents layout shift before image appears */}
               <div className="relative w-80 h-80 md:w-96 md:h-96 lg:w-[420px] lg:h-[420px]">
                 <AnimatePresence>
                   {showImage && (
@@ -159,10 +227,10 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                       animate="visible"
                       transition={{
                         type: "spring",
-                        stiffness: 240,
-                        damping: 18,
-                        mass: 0.9,
-                        bounce: 0.35,
+                        stiffness: 300,
+                        damping: 20,
+                        mass: 0.8,
+                        bounce: 0.3,
                       }}
                       className="relative will-change-transform"
                       style={{ transformOrigin: "center center" }}
@@ -173,9 +241,9 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                         animate={
                           floating
                             ? {
-                                y: [0, -10, 0, -6, 0],
+                                y: [0, -9, 0, -5, 0],
                                 transition: {
-                                  duration: 12,
+                                  duration: 10,
                                   repeat: Infinity,
                                   ease: "easeInOut",
                                   times: [0, 0.25, 0.5, 0.75, 1],
@@ -197,30 +265,26 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                             height={420}
                           />
                         </div>
-
-                        {/* Decorative elements appear after paste-in */}
                         <motion.div
                           initial={{ scale: 0, rotate: 0 }}
                           animate={{ scale: 1, rotate: 360 }}
-                          transition={{ duration: 2, delay: 0.5 }}
+                          transition={{ duration: 1.4, delay: 0.35 }}
                           className="absolute -top-4 -right-4 w-12 h-12 bg-sage-200 rounded-full flex items-center justify-center shadow-lg"
                         >
                           <span className="text-sage-700 text-xl">🏠</span>
                         </motion.div>
-
                         <motion.div
                           initial={{ scale: 0, rotate: 0 }}
                           animate={{ scale: 1, rotate: -360 }}
-                          transition={{ duration: 2, delay: 0.65 }}
+                          transition={{ duration: 1.5, delay: 0.45 }}
                           className="absolute -bottom-4 -left-4 w-12 h-12 bg-meadow-200 rounded-full flex items-center justify-center shadow-lg"
                         >
                           <span className="text-meadow-700 text-xl">🚀</span>
                         </motion.div>
-
                         <motion.div
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
-                          transition={{ duration: 1.2, delay: 0.8 }}
+                          transition={{ duration: 1, delay: 0.5 }}
                           className="absolute top-1/2 -right-8 w-8 h-8 bg-sage-300 rounded-full flex items-center justify-center shadow-md"
                         >
                           <span className="text-sage-800 text-sm">💻</span>
@@ -235,7 +299,7 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
         </div>
       </div>
 
-      {/* Keyboard Section - Part of content flow */}
+      {/* Keyboard Section */}
       <div className="absolute bottom-24 left-0 right-0 px-6">
         <AnimatePresence>
           {showEnterHint && (
@@ -244,13 +308,13 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
               initial={{ opacity: 0, y: 6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -4 }}
-              transition={{ duration: 1.2 }}
+              transition={{ duration: 0.9 }}
               className="mb-2 text-center text-sage-600 text-xs md:text-sm font-light tracking-wide pointer-events-none select-none w-full"
             >
               <motion.span
-                animate={{ scale: [1, 1.05, 1], opacity: [1, 0.9, 1] }}
+                animate={{ scale: [1, 1.05, 1], opacity: [1, 0.92, 1] }}
                 transition={{
-                  duration: 2.2,
+                  duration: 1.8,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}
@@ -263,9 +327,9 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
         </AnimatePresence>
         <div className="max-w-4xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5 }}
+            transition={{ duration: 0.65, delay: 0.35 }}
             className="bg-sage-50/80 backdrop-blur-sm rounded-2xl p-6 border border-sage-200/50 shadow-lg relative"
           >
             {/* Hint moved outside for true centering */}
