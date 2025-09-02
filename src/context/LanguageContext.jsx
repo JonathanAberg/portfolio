@@ -50,7 +50,7 @@ const translations = {
       featuredTitle: "Utvalda projekt",
       allTitle: "Alla projekt",
       featuredSubtitle:
-        "En handplockad lista av projekt. Vill du se fler? Scrolla eller klicka nedan.",
+        "En handplockad lista av projekt. Vill du se fler? Klicka på min GitHub nedan.",
       showAll: "Se alla projekt",
       detailsBadge: "Visa detaljer",
       viewMore: "Visa mer",

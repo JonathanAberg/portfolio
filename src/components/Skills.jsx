@@ -124,8 +124,8 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      data-enter-offset="90" // adjust this value (positive = scroll a bit further down, negative = higher)
-      className="h-screen px-6 pt-20 pb-10 flex flex-col bg-gradient-to-b from-meadow-50 to-white scroll-mt-24 overflow-hidden"
+      data-enter-offset="100" // adjust this value (positive = scroll a bit further down, negative = higher)
+      className="h-screen px-6 pt-20 pb-10 flex flex-col bg-gradient-to-b from-meadow-50 to-white overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full flex flex-col h-full">
         {/* Header */}

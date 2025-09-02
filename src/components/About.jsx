@@ -75,18 +75,18 @@ const About = () => {
   return (
     <section
       id="about"
-      data-enter-offset="120"
-      className="py-32 px-6 bg-gradient-to-b from-meadow-50 to-white scroll-mt-24"
+      data-enter-offset="100"
+      className="pt-28 pb-32 px-6 bg-gradient-to-b from-meadow-50 to-white"
     >
       <div className="max-w-7xl mx-auto">
         {/* About Us Header */}
-        <div className="mb-26 lg:mb-10">
+        <div className="mb-16 lg:mb-8">
           <motion.h2
             variants={titleVariants}
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.3 }}
-            className="text-4xl md:text-6xl lg:text-7xl text-sage-900 mb-8"
+            className="text-4xl md:text-6xl lg:text-7xl text-sage-900 mb-6"
           >
             {splitText(t.about.title)}
           </motion.h2>

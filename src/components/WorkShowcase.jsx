@@ -13,19 +13,12 @@ import {
 } from "lucide-react"; // added icons for bottom intro
 import { useLanguage } from "../context/LanguageContext";
 // Local screenshots imports
-import t1 from "../assets/projects/twitter2/shot1.png";
-import t2 from "../assets/projects/twitter2/shot2.jpg";
-import t3 from "../assets/projects/twitter2/shot3.jpg";
-import m1 from "../assets/projects/minkompis/shot1.jpg";
-import m2 from "../assets/projects/minkompis/shot2.jpg";
-import m3 from "../assets/projects/minkompis/shot3.jpg";
-import b1 from "../assets/projects/beatai/shot1.jpg";
-import b2 from "../assets/projects/beatai/shot2.jpg";
-import b3 from "../assets/projects/beatai/shot3.jpg";
-import d1 from "../assets/projects/dogbook/shot1.jpg";
-import d2 from "../assets/projects/dogbook/shot2.jpg";
-import d3 from "../assets/projects/dogbook/shot3.jpg";
-
+import m1 from "../assets/projects/minkompis/shot1.png";
+import m2 from "../assets/projects/minkompis/shot2.png";
+import m3 from "../assets/projects/minkompis/shot3.png";
+import b1 from "../assets/projects/beatai/shot1.png";
+import b2 from "../assets/projects/beatai/shot2.png";
+import b3 from "../assets/projects/beatai/shot3.png";
 const WorkShowcase = ({ variant = "all" }) => {
   const { t } = useLanguage();
   // Force variant to 'featured' only usage by ignoring 'all'
@@ -35,20 +28,6 @@ const WorkShowcase = ({ variant = "all" }) => {
   const closeButtonRef = useRef(null);
 
   const projects = [
-    {
-      id: 1,
-      title: "Twitter2",
-      category: "Full-Stack Social Media",
-      description:
-        "A modern Twitter clone built with React frontend, featuring real-time posting, user interactions, and responsive design with Tailwind CSS.",
-      detailedDescription:
-        "A comprehensive social media platform that replicates Twitter's core functionality with modern web technologies. Features include real-time posting, user authentication, responsive design, and interactive UI components built with React and styled with Tailwind CSS.",
-      year: "2024",
-      link: "https://github.com/JonathanAberg/Twitter2-Frontend",
-      featured: true,
-      tech: ["React", "Tailwind CSS", "Frontend"],
-      screenshots: [t1, t2, t3],
-    },
     {
       id: 2,
       title: "MinKompis",
@@ -62,6 +41,7 @@ const WorkShowcase = ({ variant = "all" }) => {
       featured: true,
       tech: ["React", "JavaScript", "Web App"],
       screenshots: [m1, m2, m3],
+      portrait: true, // mark as portrait (mobile) so we render differently in modal
     },
     {
       id: 3,
@@ -76,20 +56,7 @@ const WorkShowcase = ({ variant = "all" }) => {
       featured: true,
       tech: ["AI", "React", "Modern UI"],
       screenshots: [b1, b2, b3],
-    },
-    {
-      id: 4,
-      title: "DogBook",
-      category: "Social Platform",
-      description:
-        "A social platform for dog lovers to connect, share photos, and discover new friends for their furry companions with a clean, modern interface.",
-      detailedDescription:
-        "A specialized social network for dog enthusiasts to connect, share experiences, and find companions for their pets. Features photo sharing, user profiles, and community-focused interactions with a warm, friendly design.",
-      year: "2024",
-      link: "https://github.com/JonathanAberg/DogBook",
-      featured: true,
-      tech: ["React", "Social", "Community"],
-      screenshots: [d1, d2, d3],
+      portrait: true, // visa i telefonformat
     },
   ];
 
@@ -201,10 +168,10 @@ const WorkShowcase = ({ variant = "all" }) => {
     <>
       <section
         id={effectiveVariant === "featured" ? "work-featured" : "alla-projekt"}
-        data-enter-offset={effectiveVariant === "featured" ? "120" : "0"}
+        data-enter-offset={effectiveVariant === "featured" ? "150" : "0"}
         className={`py-32 ${
           effectiveVariant === "featured" ? "bg-meadow-50" : "bg-white"
-        } relative overflow-hidden scroll-mt-24`}
+        } relative overflow-hidden`}
         role="region"
         aria-labelledby={
           effectiveVariant === "featured" ? "heading-utvalda" : "heading-alla"
@@ -255,7 +222,7 @@ const WorkShowcase = ({ variant = "all" }) => {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
-            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+            className="flex flex-wrap justify-center gap-6 max-w-6xl mx-auto"
           >
             {displayedProjects.map((project, index) => (
               <motion.div key={project.id} variants={itemVariants}>
@@ -413,13 +380,24 @@ const WorkShowcase = ({ variant = "all" }) => {
               <div className="p-6 overflow-y-auto max-h-[calc(90vh-140px)]">
                 {/* Image Carousel */}
                 <div className="relative mb-6">
-                  <div className="aspect-[16/10] bg-sage-100 rounded-xl overflow-hidden">
+                  {/* Dynamic container: use aspect ratio for landscape, fixed height with contain for portrait */}
+                  <div
+                    className={
+                      selectedProject.portrait
+                        ? "bg-sage-100 rounded-xl overflow-hidden h-[60vh] sm:h-[70vh] flex items-center justify-center"
+                        : "bg-sage-100 rounded-xl overflow-hidden aspect-[16/10]"
+                    }
+                  >
                     <img
                       src={selectedProject.screenshots[currentImageIndex]}
                       alt={`${selectedProject.title} screenshot ${
                         currentImageIndex + 1
                       }`}
-                      className="w-full h-full object-cover"
+                      className={
+                        selectedProject.portrait
+                          ? "h-full w-auto object-contain"
+                          : "w-full h-full object-cover"
+                      }
                       loading="lazy"
                       decoding="async"
                     />

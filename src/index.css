@@ -11,6 +11,8 @@
   html {
     @apply scroll-smooth;
     font-size: 16px;
+    /* Increased to give headings more breathing room below fixed nav */
+    scroll-padding-top: 120px; /* was 96px */
   }
 
   body {
