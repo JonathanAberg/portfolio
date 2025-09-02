@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 
 const Skills = () => {
-  // Animation variants
   const titleVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -56,7 +55,6 @@ const Skills = () => {
     }),
   };
 
-  // Split text into characters for animation
   const splitText = (text) =>
     text.split("").map((char, index) => (
       <motion.span key={index} variants={charVariants}>
@@ -120,7 +118,6 @@ const Skills = () => {
     },
   ];
 
-  // NEW COMPACT LAYOUT (adjusted)
   return (
     <section
       id="skills"

@@ -10,7 +10,6 @@ const Navigation = () => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    // Scroll-based navbar background opacity
     const handleScroll = () => {
       const scrollY = window.scrollY;
       const navbar = navRef.current;
@@ -47,7 +46,6 @@ const Navigation = () => {
     };
   }, [open]);
 
-  // Animation variants
   const navVariants = {
     hidden: { opacity: 0 },
     visible: {

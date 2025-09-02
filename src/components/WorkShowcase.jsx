@@ -10,9 +10,9 @@ import {
   Palette,
   Zap,
   Mail,
-} from "lucide-react"; // added icons for bottom intro
+} from "lucide-react";
 import { useLanguage } from "../context/LanguageContext";
-// Local screenshots imports
+
 import m1 from "../assets/projects/minkompis/shot1.png";
 import m2 from "../assets/projects/minkompis/shot2.png";
 import m3 from "../assets/projects/minkompis/shot3.png";
@@ -21,7 +21,7 @@ import b2 from "../assets/projects/beatai/shot2.png";
 import b3 from "../assets/projects/beatai/shot3.png";
 const WorkShowcase = ({ variant = "all" }) => {
   const { t } = useLanguage();
-  // Force variant to 'featured' only usage by ignoring 'all'
+
   const effectiveVariant = variant === "all" ? "featured" : variant;
   const [selectedProject, setSelectedProject] = useState(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -41,7 +41,7 @@ const WorkShowcase = ({ variant = "all" }) => {
       featured: true,
       tech: ["React", "JavaScript", "Web App"],
       screenshots: [m1, m2, m3],
-      portrait: true, // mark as portrait (mobile) so we render differently in modal
+      portrait: true,
     },
     {
       id: 3,
@@ -56,11 +56,10 @@ const WorkShowcase = ({ variant = "all" }) => {
       featured: true,
       tech: ["AI", "React", "Modern UI"],
       screenshots: [b1, b2, b3],
-      portrait: true, // visa i telefonformat
+      portrait: true,
     },
   ];
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -142,7 +141,6 @@ const WorkShowcase = ({ variant = "all" }) => {
     }
   }, [selectedProject]);
 
-  // Keyboard handlers inside modal
   useEffect(() => {
     if (!selectedProject) return;
     const handler = (e) => {
@@ -210,11 +208,7 @@ const WorkShowcase = ({ variant = "all" }) => {
             )}
           </motion.div>
 
-          {effectiveVariant === "featured" && (
-            // Removed previous intro block (CTA + tagline + value cards)
-            // to match exact desired layout with only header -> grid -> CTA row
-            <></>
-          )}
+          {effectiveVariant === "featured" && <></>}
 
           {/* Projects Grid */}
           <motion.div

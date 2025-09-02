@@ -4,7 +4,6 @@ import { useLanguage } from "../context/LanguageContext";
 const About = () => {
   const { t } = useLanguage();
 
-  // Animation variants
   const titleVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -63,7 +62,6 @@ const About = () => {
     },
   };
 
-  // Split text into characters for animation
   const splitText = (text) => {
     return text.split("").map((char, index) => (
       <motion.span key={index} variants={charVariants}>

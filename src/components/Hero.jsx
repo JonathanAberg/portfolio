@@ -8,7 +8,6 @@ const Hero = () => {
   const [showKeyboard, setShowKeyboard] = useState(false);
   const heroText = t.hero.greeting;
 
-  // Start keyboard animation after initial delay
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowKeyboard(true);

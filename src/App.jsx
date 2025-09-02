@@ -50,14 +50,13 @@ function App() {
       if (next) {
         window.dispatchEvent(new Event("simulateEnterPress"));
         scrolling = true;
-        // Use global scroll-padding-top (or nav height fallback) for consistent alignment
         const rootStyle = getComputedStyle(document.documentElement);
         const scrollPaddingTop =
           parseInt(rootStyle.scrollPaddingTop || "0") || 0;
         const nav = document.querySelector("nav");
         const navH = nav ? Math.round(nav.getBoundingClientRect().height) : 0;
-        const baseOffset = scrollPaddingTop || navH; // prefer CSS value
-        const extra = parseInt(next.dataset.enterOffset || "0"); // usually 0 now
+        const baseOffset = scrollPaddingTop || navH;
+        const extra = parseInt(next.dataset.enterOffset || "0");
         const targetTop =
           next.getBoundingClientRect().top +
           window.scrollY -

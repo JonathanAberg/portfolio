@@ -6,7 +6,6 @@ const ThemeToggle = () => {
   const [isPristine, setIsPristine] = useState(true);
 
   useEffect(() => {
-    // Check for saved theme preference or default to light mode
     const savedTheme = localStorage.getItem("theme");
     const prefersDark = window.matchMedia(
       "(prefers-color-scheme: dark)"
@@ -22,7 +21,7 @@ const ThemeToggle = () => {
   }, []);
 
   const toggleTheme = () => {
-    setIsPristine(false); // Remove pristine class to enable animations
+    setIsPristine(false);
     setIsDark(!isDark);
 
     if (!isDark) {

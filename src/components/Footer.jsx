@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 
 const Footer = () => {
-  // Animation variants
   const contentVariants = {
     hidden: { opacity: 0 },
     visible: {

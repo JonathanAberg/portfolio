@@ -174,4 +174,3 @@ export const LanguageProvider = ({ children }) => {
 };
 
 export const useLanguage = () => useContext(LanguageContext);
-// Note: Non-component exports are intentional for context utilities.

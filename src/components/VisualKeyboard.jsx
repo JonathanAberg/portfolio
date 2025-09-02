@@ -62,7 +62,7 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
   useEffect(() => {
     if (currentIndex === text.length) {
       const t = setTimeout(() => setShowImage(true), 180);
-      // Show enter hint shortly after finishing typing
+
       const hintTimer = setTimeout(() => setShowEnterHint(true), 600);
       return () => {
         clearTimeout(t);
@@ -71,7 +71,6 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     }
   }, [currentIndex, text.length]);
 
-  // Listen for custom simulateEnterPress event to animate Enter key globally for sequential navigation.
   useEffect(() => {
     const simulate = () => {
       setPressedKey("enter");
@@ -83,15 +82,13 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
     return () => window.removeEventListener("simulateEnterPress", simulate);
   }, []);
 
-  // Function to trigger global Enter navigation when clicking the on-screen Enter key
   const triggerNextSection = () => {
     window.dispatchEvent(new KeyboardEvent("keydown", { key: "Enter" }));
   };
 
-  // Start floating effect after image fully appears
   useEffect(() => {
     if (showImage) {
-      const startFloatTimer = setTimeout(() => setFloating(true), 900); // wait for entrance spring
+      const startFloatTimer = setTimeout(() => setFloating(true), 900);
       return () => clearTimeout(startFloatTimer);
     } else {
       setFloating(false);
@@ -370,7 +367,6 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
                       : "text-sage-700 hover:border-sage-300"
                   }`}
                   style={{
-                    // Fallback explicit heights if arbitrary values not generated
                     height: "5.5rem",
                   }}
                 >
