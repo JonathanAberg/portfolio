@@ -182,6 +182,28 @@ const Footer = () => {
               Terms of Service
             </a>
           </div>
+          <div className="mt-8 md:mt-0 flex items-center gap-4">
+            <a
+              href="/cv/CV_Jonathan_Aberg.pdf"
+              download
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white text-sm font-medium px-4 py-2 rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/40"
+            >
+              <svg
+                className="w-4 h-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4 20h16M12 4v12m0 0l4-4m-4 4l-4-4"
+                />
+              </svg>
+              <span>Ladda ner CV</span>
+            </a>
+          </div>
         </motion.div>
 
         {/* Background Gradient */}

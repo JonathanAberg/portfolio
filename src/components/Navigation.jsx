@@ -156,6 +156,27 @@ const Navigation = () => {
               >
                 {t.nav.contact}
               </motion.a>
+              <motion.a
+                variants={linkVariants}
+                href="/cv/CV_Jonathan_Aberg.pdf"
+                download
+                className="text-sm inline-flex items-center gap-2 bg-sage-900 text-white px-4 py-2 rounded-full font-medium hover:bg-sage-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 shadow-sm transition-colors"
+              >
+                <span>CV</span>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M4 20h16M12 4v12m0 0l4-4m-4 4l-4-4"
+                  />
+                </svg>
+              </motion.a>
             </motion.div>
 
             {/* Language Switcher */}
