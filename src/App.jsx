@@ -85,7 +85,7 @@ function App() {
 
   return (
     <LanguageProvider>
-      <div className="min-h-screen" id="main">
+      <div className="min-h-[100dvh]" id="main">
         <ScrollProgress />
         <Navigation />
         <Hero />

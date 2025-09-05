@@ -49,6 +49,7 @@
   }
 
   .card-bg {
+    background-color: rgba(255, 255, 255, 0.8);
     @apply bg-white/60 backdrop-blur-sm border border-sage-200/40;
   }
 

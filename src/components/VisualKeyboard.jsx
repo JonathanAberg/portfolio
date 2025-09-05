@@ -159,9 +159,9 @@ const VisualKeyboard = ({ text, onComplete, isActive }) => {
   };
 
   return (
-    <div className="relative min-h-screen bg-gradient-to-b from-sage-50 to-meadow-50">
+    <div className="relative min-h-[100dvh] bg-gradient-to-b from-sage-50 to-meadow-50">
       {/* Main Content Section */}
-      <div className="flex items-start justify-center px-6 pt-8 pb-8 min-h-screen">
+      <div className="flex items-start justify-center px-4 md:px-6 pt-8 pb-8 min-h-[60vh] md:min-h-[70vh] lg:min-h-[80vh]">
         <div className="max-w-screen-lg mx-auto w-full">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
             {/* Left Side - Text Display */}
