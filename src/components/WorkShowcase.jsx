@@ -301,13 +301,6 @@ const WorkShowcase = ({ variant = "all" }) => {
               className="mt-20 flex flex-col sm:flex-row items-center justify-center gap-4"
             >
               <a
-                href="#work-featured"
-                className="bg-sage-600 text-white px-8 py-4 rounded-full text-sm md:text-base font-medium hover:bg-sage-700 transition-colors shadow-lg hover:shadow-xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500"
-              >
-                {t.hero.ctaProjects}
-                <ArrowRight className="w-4 h-4 inline ml-2" />
-              </a>
-              <a
                 href="#contact"
                 className="bg-white text-sage-800 px-8 py-4 rounded-full text-sm md:text-base font-medium border border-sage-300 hover:border-sage-400 hover:bg-sage-50 transition-colors shadow-sm hover:shadow focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sage-500 inline-flex items-center"
               >
