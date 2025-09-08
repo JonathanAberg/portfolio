@@ -121,7 +121,7 @@ const Skills = () => {
   return (
     <section
       id="skills"
-      data-enter-offset="90" // lowered offset so section locks in slightly higher (was 100)
+      data-enter-offset="90"
       className="min-h-screen px-6 pt-12 md:pt-14 pb-12 flex flex-col bg-gradient-to-b from-meadow-50 to-white overflow-hidden"
     >
       <div className="max-w-7xl mx-auto w-full flex flex-col flex-1">

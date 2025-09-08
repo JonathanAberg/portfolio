@@ -21,7 +21,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* Remove transition to allow animations to work */
+  /* Removed transition to allow animations to work */
 }
 
 .theme-toggle-container.dark .icon-container {
